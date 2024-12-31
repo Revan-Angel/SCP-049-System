@@ -14,6 +14,21 @@ This addon is available on the Workshop just [here](https://steamcommunity.com/s
 ## Commands
 + Eveythings in game, with the Guthen Base !
 
+## Features
+Contains a SWEP, of class `scp049`, designed for multiplayer:
++ **Left Mouse Button**: You will be able **to transform** your victims in order **to heal** them and turn them **into your zombies.**
++ **Right Mouse Button**: to Heal your zombies
++ **Reload**: Menu to choose the Type of zombies
++ **Calms down** with the lavander
++ Configurable in-game with [[GuthSCP] Base](https://steamcommunity.com/sharedfiles/filedetails/?id=3034737316) (`guthscp_menu` in your console)
+    + **Health**: If SCP 049 is Immortal ? And how time it takes to heal his zombies
+    + **Sound**: Custom sounds played random (soon)
+    + **Full translation system (soon)** 
+    + ***and more..***
++ **DarkRP Dependant or variant**
++ **Custom compatibility with:**
+    + [[GuthSCP] Keycard](https://steamcommunity.com/sharedfiles/filedetails/?id=3034740776)
+
 ## Legal Terms
 This addon is licensed under [Creative Commons Sharealike 3.0](https://creativecommons.org/licenses/by-sa/3.0/) and is based on content of [SCP Foundation](http://scp-wiki.wikidot.com/)
 
