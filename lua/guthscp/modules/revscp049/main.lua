@@ -1,10 +1,35 @@
+--[[
+	Fonctionnalités:
+		- Clic gauche: Transformer le joueur en zombie
+		- Reload: Menu Types de Zombies
+		- Animation de la main lorsque 049 est proche d'un joueur non zombie (configurable)
+		- Animation lors de l'infection
+		- Barre de progression pour infecter un joueur (configurable)
+		- Particules lors de l'infection (configurable)
+		- QTE pour éviter d'être infecté (configurable)
+
+		- Voir les zombies à travers les murs (configurable)
+		- Nombre maximal de zombies (configurable)
+		- Les zombies ne peuvent pas ouvrir les portes (configurable)
+		- Permettre aux zombies de parler qu'à 049 ou Alors les empêcher de parler (Configurable)
+		- SCP 049 Immortel (configurable)
+		- SCP 049 ne peux pas sauter (configurable)
+
+		- Vitesse de marche pour SCP-049 & zombies (configurable)
+		- SWEP Lavende pour bypass PrimaryAttack
+		- SWEP Lavende permet de voir le joueur qui le possède en évidence (Configurable)
+		- Système de traduction (configurable)
+		- Sons aléatoire jouer par 049 (Configurable)
+		- Délai de guérison des zombies par 049 (Configurable)
+]]--
+
 local MODULE = {
     name = "SCP-049",
     author = "RevanAngel",
     version = "1.0.0",
     description = "Be the doctor. Heal your patients",
     icon = "icon16/user.png",
-	version_url = "https://raw.githubusercontent.com/augaton/scp-hacking-device-reloaded/main/lua/guthscp/modules/hdevicereloaded/main.lua",
+	version_url = "https://raw.githubusercontent.com/Revan-Angel/scp049-guthen/refs/heads/main/lua/guthscp/modules/revscp049/main.lua?token=GHSAT0AAAAAAC32UHSSHHNT43RAWTMUQ3O4Z3T5P5A",
     dependencies = {
 		base = "2.2.0",
 		guthscpkeycard = "2.1.4",
@@ -81,6 +106,23 @@ MODULE.menu = {
 					default = {},
 				},
 			},
+			"Progress Bar",
+			{
+				{
+				type = "Bool",
+				name = "Progress Bar",
+				id = "progressbar",
+				desc = "Should progress bar for SCP-049 be enabled?",
+				default = false,
+				},
+				{
+				type = "Number",
+				name = "Progress Bar Speed",
+				id = "progressbar_speed",
+				desc = "How fast should the progress bar be filled?",
+				default = 0.5,
+				},
+			},
 			"Sounds",
 			{
 				{
@@ -101,10 +143,45 @@ MODULE.menu = {
 			"Translations",
 			{
 				type = "String",
-				name = "Languages",
-				id = "language_doctor",
-				desc = "Language uses. (EN ; FR ; RU ; GER)",
-				default = "EN",
+				name = "Text display", 
+				id = "translation_1", 
+				desc = "Text display with the weapon", 
+				default = "LMB - Cure the pestilence; RMB - Restore health to the cured player;  R  - Choose a treatment method",
+			},
+			{
+				type = "String",
+				name = "DarkRP game mode required",
+				id = "translation_2", 
+				desc = "Text shown to the player when the hack is complete",
+				default = "DarkRP game mode required",
+			},
+			{
+				type = "String",
+				name = "This player doesn\'t have a pestilence!",
+				id = "translation_3", 
+				desc = "Text display when the player is a zombie", 
+				default = "This player doesn\'t have a pestilence!",
+			},
+			{
+				type = "String",
+				name = "You have exceeded the limit of treatment for pestilence.",
+				id = "translation_4", 
+				desc = "Max zombie limit reach'", 
+				default = "You have exceeded the limit of treatment for pestilence.",
+			},
+			{
+				type = "String",
+				name = "Close",
+				id = "translation_5", 
+				desc = "Close button", 
+				default = "Close",
+			},
+			{
+				type = "String",
+				name = "Zombie",
+				id = "translation_6", 
+				desc = "Zombie name", 
+				default = "Zombie",
 			},
 		},
 	},
