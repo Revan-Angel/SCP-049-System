@@ -1,6 +1,8 @@
 AddCSLuaFile()
 if not scp049 then scp049 = {} end
+local dist_sqr = 125 * 125 -- second number is the threshold distance between the player and the scp
 local revscp049 = guthscp.modules.revscp049
+
 
 if not guthscp then
     error("guthscp049 - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!")
@@ -177,6 +179,95 @@ function revscp049.is_scp_049_zombie(ply)
     return ply:GetNWBool("IsZombie", false) -- Retourne vrai si le joueur est un zombie
 end
 
+-- Fonction pour gérer la transformation de la cible en zombie
+function SWEP:CallRagdollTarget(owner, target)
+    -- Vérifier si la cible est déjà un zombie
+    if revscp049.is_scp_049_zombie(target) then
+        if isDarkRP then
+            DarkRP.notify(owner, 1, 1, scp049.lang[3]) -- Message: "La cible est déjà un zombie"
+        end
+        return
+    end
+
+    -- Rendre la cible invisible et la bloquer
+    target:SetNoDraw(true)
+    target:Lock()
+    target:StripWeapons()
+    target:SetCollisionGroup(COLLISION_GROUP_WORLD)
+    
+    -- Créer le ragdoll basé sur la cible
+    local ragdoll = ents.Create("prop_ragdoll")
+    ragdoll:SetModel(target:GetModel())
+    ragdoll:SetPos(target:GetPos())
+    ragdoll:SetAngles(target:GetAngles())
+    ragdoll:Spawn()
+    ragdoll:Activate()
+
+    -- Appliquer une force pour lancer le ragdoll
+    local phys = ragdoll:GetPhysicsObject()
+    if IsValid(phys) then
+        phys:ApplyForceCenter(owner:GetForward() * 500 * 500)
+    end
+
+    -- Définir la vue de la cible sur le ragdoll
+    target:SetViewEntity(ragdoll)
+
+    -- Timer pour restaurer la cible après 5 secondes
+    timer.Simple(5, function()
+        if IsValid(target) and IsValid(ragdoll) then
+            -- Restaurer la position du joueur
+            target:SetPos(ragdoll:GetPos())
+            ragdoll:Remove() -- Supprimer le ragdoll
+
+            -- Modifier le modèle et les caractéristiques du zombie
+            local zombieData = scp049.ZombieTypes[ZombieType]
+            if not zombieData then
+                print("ZombieType is not defined correctly.")
+                return
+            end
+            target:SetModel(zombieData.model)
+            target:SetMaxHealth(zombieData.health)
+            target:SetHealth(zombieData.health)
+            target:SetWalkSpeed(zombieData.speed)
+            target:SetRunSpeed(zombieData.speed)
+            target:SetNWBool("IsZombie", true)
+
+            -- Supprimer toutes les armes du joueur
+            target:StripWeapons()
+
+            -- Donner une nouvelle arme au joueur
+            target:Give("revscp049_zombie")
+
+            -- Incrémenter le nombre de zombies
+            scp049.Zombies = scp049.Zombies + 1
+
+            -- Restaurer la position de la cible
+            target:SetPos(target:GetPos())
+
+            -- Émettre un son de douleur zombie
+            target:EmitSound("npc/zombie/zombie_pain5.mp3")
+
+            -- Jouer l'animation de levée
+            target:DoAnimationEvent(ACT_HL2MP_ZOMBIE_SLUMP_RISE)
+
+            -- Restaurer les collisions du joueur
+            target:SetCollisionGroup(COLLISION_GROUP_NONE)
+        end
+    end)
+
+    -- Timer pour déverrouiller le joueur et restaurer sa vue après 4 secondes
+    timer.Simple(4, function()
+        if IsValid(target) then
+            target:UnLock() -- Déverrouiller le joueur
+            target:SetViewEntity(target) -- Restaurer la vue normale du joueur
+        end
+    end)
+
+    -- Réinitialiser la barre de progression
+    self:SetNWFloat("Progress", 0)
+end
+
+-- Fonction d'attaque primaire pour infecter la cible
 function SWEP:PrimaryAttack()
     if SERVER then
         local ply = self:GetOwner()
@@ -206,7 +297,7 @@ function SWEP:PrimaryAttack()
             -- Vérifier si la cible est déjà un zombie
             if revscp049.is_scp_049_zombie(target) then
                 if isDarkRP then
-                    DarkRP.notify(self.Owner, 1, 1, scp049.lang[3])
+                    DarkRP.notify(self.Owner, 1, 1, scp049.lang[3]) -- Message: "La cible est déjà un zombie"
                 end
                 return
             end
@@ -227,7 +318,7 @@ function SWEP:PrimaryAttack()
             
             if ignoreTeams[teamKeyName] then
                 if isDarkRP then
-                    DarkRP.notify(self.Owner, 1, 1, "This team cannot be transform")
+                    DarkRP.notify(self.Owner, 1, 1, "This team cannot be transformed")
                 end
                 return
             end
@@ -243,32 +334,8 @@ function SWEP:PrimaryAttack()
 
             -- Si toutes les conditions sont remplies, transformer la cible en zombie
             if isDarkRP then
-                local pos = target:GetPos()
-                local zombieData = scp049.ZombieTypes[ZombieType]
-                if not zombieData then
-                    print("ZombieType is not defined correctly.")
-                    return
-                end
-
-                -- Modifier le modèle et les caractéristiques du zombie
-                target:SetModel(zombieData.model)
-                target:SetMaxHealth(zombieData.health)
-                target:SetHealth(zombieData.health)
-                target:SetWalkSpeed(zombieData.speed)
-                target:SetRunSpeed(zombieData.speed)
-                target:SetNWBool("IsZombie", true)
-
-                -- Supprimer toutes les armes du joueur
-                target:StripWeapons()
-
-                -- Donner une nouvelle arme au joueur
-                target:Give("revscp049_zombie")
-
-                -- Incrémenter le nombre de zombies
-                scp049.Zombies = scp049.Zombies + 1
-
-                -- Restaurer la position de la cible
-                target:SetPos(pos)
+                -- Appeler la fonction pour transformer la cible en zombie avec ragdoll
+                self:CallRagdollTarget(self:GetOwner(), target)
             else
                 print('SCP-049 SWEP | ' .. scp049.lang[2]) -- "La base DarkRP est requise"
             end
