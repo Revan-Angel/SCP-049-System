@@ -5,7 +5,7 @@
 ![Steam Downloads](https://img.shields.io/steam/downloads/3302753364?color=red&style=for-the-badge)
 ![Steam Favorites](https://img.shields.io/steam/favorites/3302753364?color=red&style=for-the-badge)
 
-This addon is available on the Workshop just [here](https://steamcommunity.com/sharedfiles/filedetails/?id=3302753364)!
+This addon is available on the Workshop just [here](https://steamcommunity.com/sharedfiles/filedetails/?id=3397375941)!
 
 > [!IMPORTANT]
 > Look for required content in the workshop version of the addon without it, the addon will not work !
