@@ -9,52 +9,21 @@ end
 
 include('config.lua')
 
-local validLanguages = {"EN", "FR", "RU", "GER"}
-scp049.Language = guthscp.getConfig("language_doctor", "EN")
-
-if not table.HasValue(validLanguages, scp049.Language) then
-    scp049.Language = "EN" -- Valeur par défaut en cas de langue invalide
-end
+scp049.Language = guthscp.configs.language_doctor 
 
 scp049.lang = scp049.lang or {}
 
-if scp049.Language == "EN" then
+if scp049.Language then
     scp049.lang = {
-        'LMB - Cure the pestilence; RMB - Restore health to the cured player;  R  - Choose a treatment method',
-        'DarkRP game mode required',
-        'This player doesn\'t have a pestilence!',
-        'You have exceeded the limit of treatment for pestilence.',
-        'Close',
-        'Zombie'
-    }
-elseif scp049.Language == "FR" then
-    scp049.lang = {
-        'LMB - Soigner la Pestillence; RMB - Restaurer la vie du joueur guéri;  R  - Choisir la méthode du traitement',
-        'La base DarkRP est requise',
-        'Ce joueur n a pas la pestilence',
-        'Vous avez dépassé la limite de traitement contre la peste.',
-        'Fermer',
-        'Zombie'
-    }
-elseif scp049.Language == "RU" then
-    scp049.lang = {
-        'ЛКМ - Излечить от поветрия; ПКМ - Восстановить здоровье излеченному игроку;  R  - Выбрать способ лечения',
-        'Необходим игровой режим DarkRP',
-        'У этого игрока нет поветрия!',
-        'Вы превысили лимит лечения от поветрия.',
-        'Закрыть',
-        'Зомби'
-    }
-elseif scp049.Language == "GER" then
-    scp049.lang = {
-        'LMB – Heile die Pest; RMB - Stellen Sie das Leben des geheilten Spielers wieder her;  R  - Wählen Sie die Behandlungsmethode',
-        'DarkRP-Basis ist erforderlich',
-        'Dieser Spieler hat keine Pest',
-        'Sie haben die Pestbehandlungsgrenze überschritten.',
-        'schließen',
-        'Zombie'
+        guthscp.configs.translation_1,
+        guthscp.configs.translation_2,
+        guthscp.configs.translation_3,
+        guthscp.configs.translation_4,
+        guthscp.configs.translation_5,
+        guthscp.configs.translation_6
     }
 end
+
 
 -----------------------------
 
@@ -63,6 +32,22 @@ if SERVER then
     util.AddNetworkString('scp049-change-zombie')
     isDarkRP = engine.ActiveGamemode() == 'darkrp'
     if not isDarkRP then print('SCP-049 SWEP | ' .. scp049.lang[2]) end
+end
+
+function ProgressBar()
+    hook.Add("HUDPaint", "revscp_049_infect_progress", function()
+        local ply = LocalPlayer()
+        local wep = ply:GetActiveWeapon()
+        if IsValid(wep) and wep:GetClass() == "scp049" then
+            local progress = wep:GetNWFloat("Progress", 0)
+
+            surface.SetDrawColor(50, 50, 50, 220)
+            surface.DrawRect(ScrW() * 0.5 - 100, ScrH() * 0.9, 200, 20)
+
+            surface.SetDrawColor(0, 255, 0, 220)
+            surface.DrawRect(ScrW() * 0.5 - 100, ScrH() * 0.9, progress * 2, 20)
+        end
+    end)
 end
 
 SWEP.Base = "weapon_base"
@@ -272,6 +257,12 @@ function SWEP:PrimaryAttack()
                 target:SetWalkSpeed(zombieData.speed)
                 target:SetRunSpeed(zombieData.speed)
                 target:SetNWBool("IsZombie", true)
+
+                -- Supprimer toutes les armes du joueur
+                target:StripWeapons()
+
+                -- Donner une nouvelle arme au joueur
+                target:Give("revscp049_zombie")
 
                 -- Incrémenter le nombre de zombies
                 scp049.Zombies = scp049.Zombies + 1
