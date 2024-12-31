@@ -2,19 +2,19 @@ if not scp049 then scp049 = {} end
 
 scp049.ZombieTypes = {
     [1] = {
-        model = "models/player/zombie_fast.mdl",
-        health = 350,
-        speed = 200,
+        model = "models/player/alski/scp049-2_scientist.mdl",
+        health = 400,
+        speed = 240,
     },
     [2] = {
-        model = "models/player/zombie_soldier.mdl",
-        health = 1000,
-        speed = 100,
+        model = "models/player/alski/scp049-2mtf2.mdl",
+        health = 1500,
+        speed = 140,
     },
     [3] = {
-        model = "models/player/charple.mdl",
-        health = 750,
-        speed = 130,
+        model = "models/player/alski/scp049-2.mdl",
+        health = 800,
+        speed = 180,
     },
 }
 
