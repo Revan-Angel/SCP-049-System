@@ -106,28 +106,28 @@ MODULE.menu = {
 					default = {},
 				},
 			},
-			"Progress Bar",
+			"Progress Bar [TEST : Don't touch]",
 			{
 				{
 				type = "Bool",
-				name = "Progress Bar",
+				name = "Progress Bar [TEST]",
 				id = "progressbar",
 				desc = "Should progress bar for SCP-049 be enabled?",
 				default = false,
 				},
 				{
 				type = "Number",
-				name = "Progress Bar Speed",
+				name = "Progress Bar Speed [TEST]",
 				id = "progressbar_speed",
 				desc = "How fast should the progress bar be filled?",
 				default = 0.5,
 				},
 			},
-			"Sounds",
+			"Sounds [TEST : Don't touch]",
 			{
 				{
 					type = "String[]",
-					name = "Random Sounds",
+					name = "Random Sounds [TEST]",
 					id = "random_sound",
 					desc = "Random-sound played by 049",
 					default = {
@@ -140,7 +140,7 @@ MODULE.menu = {
 					},
 				},
 			},
-			"Translations",
+			"Translations [In development..]",
 			{
 				type = "String",
 				name = "Text display", 
@@ -214,6 +214,19 @@ MODULE.menu = {
 		},
 	},
 }
+
+function MODULE:init()
+	--  warn for old version
+	timer.Simple( 0, function()
+		if GuthSCP and GuthSCP.registerKeycardSWEP then
+			local text = "The old version of this addon is currently running on this server. Please, delete the '[SCP] Keycard System by Guthen' addon to avoid any possible conflicts."
+			self:add_error( text )
+			self:error( text )
+		end
+	end )
+
+    MODULE:info("The 049 system has been loaded !")
+end
 
 guthscp.module.hot_reload("scp049")
 return MODULE

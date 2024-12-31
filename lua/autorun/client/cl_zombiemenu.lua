@@ -63,7 +63,7 @@ function ZombieMenu()
     CloseButton:SetPos(0, 0)
     CloseButton:SetText('')
     CloseButton.Paint = function(_, w, h)
-        local text = scp049.lang[5]
+        local text = scp049.lang[5] or "Close"
         draw.RoundedBox(5, 0, 0, w, h, CloseButtonColor)
         draw.SimpleText(text, 'scp-sweps1', w / 2, h / 2, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end

@@ -159,3 +159,7 @@ end
 function SWEP:Deploy()
     return true
 end
+
+if CLIENT then
+    guthscp.spawnmenu.add_weapon(SWEP, "SCP-049 SWEP")
+end
