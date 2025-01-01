@@ -31,9 +31,17 @@ end
 local isDarkRP
 if SERVER then
     util.AddNetworkString('scp049-change-zombie')
-    isDarkRP = engine.ActiveGamemode() == 'darkrp'
-    if not isDarkRP then print('SCP-049 SWEP | ' .. scp049.lang[2]) end
+
+    local currentGamemode = engine.ActiveGamemode()
+    isDarkRP = (currentGamemode == "darkrp") or (GAMEMODE and GAMEMODE.Config and GAMEMODE.Config.DarkRP)
+    
+    if not isDarkRP then
+        print('SCP-049 SWEP | ' .. (scp049.lang and scp049.lang[2] or "Langue non définie"))
+    else
+        print('SCP-049 SWEP | DarkRP detected.')
+    end
 end
+
 
 SWEP.Base = "weapon_base"
 
