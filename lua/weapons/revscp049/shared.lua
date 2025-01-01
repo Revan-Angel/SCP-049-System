@@ -28,9 +28,11 @@ end
 
 -----------------------------
 
+local isDarkRP
 if SERVER then
     util.AddNetworkString('scp049-change-zombie')
-    print('SCP-049 SWEP | Script loaded successfully.')
+    isDarkRP = engine.ActiveGamemode() == 'darkrp'
+    if not isDarkRP then print('SCP-049 SWEP | ' .. scp049.lang[2]) end
 end
 
 SWEP.Base = "weapon_base"
@@ -169,7 +171,9 @@ end
 
 function SWEP:CallRagdollTarget(owner, target)
     if revscp049.is_scp_049_zombie(target) then
-        print("SCP-049 SWEP | " .. scp049.lang[3]) -- Message générique dans la console
+        if isDarkRP then
+            DarkRP.notify(owner, 1, 1, scp049.lang[3])
+        end
         return
     end
 
@@ -177,7 +181,7 @@ function SWEP:CallRagdollTarget(owner, target)
     target:Lock()
     target:StripWeapons()
     target:SetCollisionGroup(COLLISION_GROUP_WORLD)
-
+    
     local ragdoll = ents.Create("prop_ragdoll")
     ragdoll:SetModel(target:GetModel())
     ragdoll:SetPos(target:GetPos())
@@ -253,35 +257,47 @@ function SWEP:PrimaryAttack()
 
         local target = tr.Entity
         self:SetNextPrimaryFire(CurTime() + 3)
-
+        
         if IsValid(target) and (target:IsPlayer() or target:IsNPC()) then
             if revscp049.is_scp_049_zombie(target) then
-                print('SCP-049 SWEP | ' .. scp049.lang[3])
+                if isDarkRP then
+                    DarkRP.notify(self.Owner, 1, 1, scp049.lang[3])
+                end
                 return
             end
-
+        
             local ignoreSCPs = guthscp.configs.revscp049.ignore_scps
             if ignoreSCPs and guthscp.is_scp(target) then
-                print('SCP-049 SWEP | ' .. "It's an SCP, You cannot.")
+                if isDarkRP then
+                    DarkRP.notify(self.Owner, 1, 1, "It's an SCP, You cannot.")
+                end
                 return
             end
-
+        
             local ignoreTeams = guthscp.configs.revscp049.ignore_teams
             local targetTeam = target:Team()
             local teamKeyName = guthscp.get_team_keyname(targetTeam)
-
+            
             if ignoreTeams[teamKeyName] then
-                print('SCP-049 SWEP | ' .. "This team cannot be transformed")
+                if isDarkRP then
+                    DarkRP.notify(self.Owner, 1, 1, "This team cannot be transformed")
+                end
                 return
             end
-
+        
             scp049.Zombies = scp049.Zombies or 0
             if scp049.Zombies >= guthscp.configs.revscp049.zb_limits and guthscp.configs.revscp049.zb_limits ~= 0 then
-                print('SCP-049 SWEP | ' .. scp049.lang[4])
+                if isDarkRP then
+                    DarkRP.notify(self.Owner, 1, 1, scp049.lang[4])
+                end
                 return
             end
 
-            self:CallRagdollTarget(self:GetOwner(), target)
+            if isDarkRP then
+                self:CallRagdollTarget(self:GetOwner(), target)
+            else
+                print('SCP-049 SWEP | ' .. scp049.lang[2])
+            end
         end
     end
 end

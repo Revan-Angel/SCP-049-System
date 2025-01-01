@@ -150,14 +150,21 @@ MODULE.menu = {
 			},
 			{
 				type = "String",
-				name = "Can't Transform",
+				name = "DarkRP game mode required",
+				id = "translation_2", 
+				desc = "Text shown to the player when the hack is complete",
+				default = "DarkRP game mode required",
+			},
+			{
+				type = "String",
+				name = "This player doesn\'t have a pestilence!",
 				id = "translation_3", 
 				desc = "Text display when the player is a zombie", 
 				default = "This player doesn\'t have a pestilence!",
 			},
 			{
 				type = "String",
-				name = "Max Zombies",
+				name = "You have exceeded the limit of treatment for pestilence.",
 				id = "translation_4", 
 				desc = "Max zombie limit reach'", 
 				default = "You have exceeded the limit of treatment for pestilence.",
@@ -171,7 +178,7 @@ MODULE.menu = {
 			},
 			{
 				type = "String",
-				name = "Zombies",
+				name = "Zombie",
 				id = "translation_6", 
 				desc = "Zombie name", 
 				default = "Zombie",
