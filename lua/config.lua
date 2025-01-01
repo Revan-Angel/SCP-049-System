@@ -1,6 +1,6 @@
-if not scp049 then scp049 = {} end
+if not revscp049 then revscp049 = {} end
 
-scp049.ZombieTypes = {
+revscp049.ZombieTypes = {
     [1] = {
         model = "models/player/alski/scp049-2_scientist.mdl",
         health = 400,
@@ -18,4 +18,4 @@ scp049.ZombieTypes = {
     },
 }
 
-scp049.DefaultZombieType = 1
+revscp049.DefaultZombieType = 1

@@ -1,21 +1,21 @@
 AddCSLuaFile()
-if not scp049 then scp049 = {} end
+if not revscp049 then revscp049 = {} end
 local revscp049 = guthscp.modules.revscp049
 local config049 = guthscp.configs.revscp049
 
 if not guthscp then
-    error("guthscp049 - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!")
+    error("revscp049 - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!")
     return
 end
 
 include('config.lua')
 
-scp049.Language = guthscp.configs.language_doctor 
+revscp049.Language = guthscp.configs.language_doctor 
 
-scp049.lang = scp049.lang or {}
+revscp049.lang = revscp049.lang or {}
 
-if scp049.Language then
-    scp049.lang = {
+if revscp049.Language then
+    revscp049.lang = {
         guthscp.configs.translation_1,
         guthscp.configs.translation_2,
         guthscp.configs.translation_3,
@@ -29,8 +29,8 @@ end
 -----------------------------
 
 if SERVER then
-    util.AddNetworkString('scp049-change-zombie')
-    print('SCP-049 SWEP | ' .. (scp049.lang and scp049.lang[2] or "Langue non définie"))
+    util.AddNetworkString('revscp049-change-zombie')
+    print('SCP-049 SWEP | ' .. (revscp049.lang and revscp049.lang[2] or "Langue non définie"))
 end
 
 
@@ -38,7 +38,7 @@ SWEP.Base = "weapon_base"
 
 SWEP.Author = 'RevanAngel'
 SWEP.PrintName = 'SCP-049'
-SWEP.Instructions = scp049.lang[1]
+SWEP.Instructions = revscp049.lang[1]
 SWEP.Category = 'GuthSCP'
 
 SWEP.Slot = 1
@@ -70,24 +70,24 @@ local openMenu = false
 local target
 local cd = 0
 local soundcd = 0
-scp049.Zombies = 0
-local ZombieType = scp049.DefaultZombieType
+revscp049.Zombies = 0
+local ZombieType = revscp049.DefaultZombieType
 
-net.Receive('scp049-change-zombie', function()
+net.Receive('revscp049-change-zombie', function()
     ZombieType = net.ReadInt(7)
 end)
 
-hook.Add('PlayerDeathThink', 'scp049-death', function(ply)
-    if ply.scp049Death and ply:scp049Death() then
+hook.Add('PlayerDeathThink', 'revscp049-death', function(ply)
+    if ply.revscp049Death and ply:revscp049Death() then
         return false
     end
 end)
 
-hook.Add('PlayerDeath', 'scp049-zombie-death', function(victim, inflictor, attacker)
+hook.Add('PlayerDeath', 'revscp049-zombie-death', function(victim, inflictor, attacker)
     if victim:GetNWBool("IsZombie", false) then
         victim:SetNWBool("IsZombie", false)
 
-        scp049.Zombies = math.max(0, scp049.Zombies - 1)
+        revscp049.Zombies = math.max(0, revscp049.Zombies - 1)
     end
 end)
 
@@ -162,7 +162,7 @@ function SWEP:Think()
     end
 end
 
-scp049.Zombies = scp049.Zombies or 0
+revscp049.Zombies = revscp049.Zombies or 0
 
 function revscp049.is_scp_049_zombie(ply)
     return ply:GetNWBool("IsZombie", false)
@@ -198,7 +198,7 @@ function SWEP:CallRagdollTarget(owner, target)
             target:SetPos(ragdoll:GetPos())
             ragdoll:Remove()
 
-            local zombieData = scp049.ZombieTypes[ZombieType]
+            local zombieData = revscp049.ZombieTypes[ZombieType]
             if not zombieData then
                 print("ZombieType is not defined correctly.")
                 return
@@ -213,7 +213,7 @@ function SWEP:CallRagdollTarget(owner, target)
             target:StripWeapons()
             target:Give("revscp049_zombie")
 
-            scp049.Zombies = scp049.Zombies + 1
+            revscp049.Zombies = revscp049.Zombies + 1
 
             target:EmitSound("npc/zombie/zombie_pain5.mp3")
             target:DoAnimationEvent(ACT_HL2MP_ZOMBIE_SLUMP_RISE)
@@ -272,8 +272,8 @@ function SWEP:PrimaryAttack()
                 return
             end
         
-            scp049.Zombies = scp049.Zombies or 0
-            if scp049.Zombies >= guthscp.configs.revscp049.zb_limits and guthscp.configs.revscp049.zb_limits ~= 0 then
+            revscp049.Zombies = revscp049.Zombies or 0
+            if revscp049.Zombies >= guthscp.configs.revscp049.zb_limits and guthscp.configs.revscp049.zb_limits ~= 0 then
                 return
             end
 
@@ -287,7 +287,7 @@ end
 
 function SWEP:Reload()
     if SERVER then
-        net.Start('scp049-change-zombie')
+        net.Start('revscp049-change-zombie')
         net.Send(self.Owner)
     end
 end

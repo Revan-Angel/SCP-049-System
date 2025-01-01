@@ -15,7 +15,7 @@ revscp049.filter_zombies = guthscp.players_filter:new("revscp049_zombie")
 
 if SERVER then
     revscp049.filter:listen_disconnect()
-    revscp049.filter:listen_weapon_users("scp049")
+    revscp049.filter:listen_weapon_users("revscp049")
 
     revscp049.filter.event_removed:add_listener("revscp049:reset", function(ply)
         revscp049.stop_scp_049_sounds(ply)
@@ -59,7 +59,7 @@ hook.Add("SetupMove", "revscp049:no_move", function(ply, mv, cmd)
 end)
 
 local function ButtonClick(a)
-    net.Start('scp049-change-zombie')
+    net.Start('revscp049-change-zombie')
         net.WriteInt(a, 7)
     net.SendToServer()
     SCPZombieMenu:Close()
@@ -67,7 +67,7 @@ end
 
 local ModelCol = {}
 function ZombieMenu()
-    for k, v in ipairs(scp049.ZombieTypes) do
+    for k, v in ipairs(revscp049.ZombieTypes) do
         ModelCol[k] = Color(68, 68, 68, 255)
     end
     local CloseButtonColor = Color(53, 53, 53, 255)
@@ -88,8 +88,8 @@ function ZombieMenu()
     SCPZombieMenu.Paint = function(self, w, h)
         draw.RoundedBox(5, 0, 0, w, h, Color(80, 80, 80, 255))
 
-        for k, v in ipairs(scp049.ZombieTypes) do
-            local a = (k - 1) / (#scp049.ZombieTypes - 1)
+        for k, v in ipairs(revscp049.ZombieTypes) do
+            local a = (k - 1) / (#revscp049.ZombieTypes - 1)
             local b = w / 5
 
             if not ModelCol[k] then ModelCol[k] = Color(68, 68, 68, 255) end
@@ -114,7 +114,7 @@ function ZombieMenu()
     CloseButton:SetPos(0, 0)
     CloseButton:SetText('')
     CloseButton.Paint = function(_, w, h)
-        local text = scp049.lang[5] or "Close"
+        local text = revscp049.lang[5] or "Close"
         draw.RoundedBox(5, 0, 0, w, h, CloseButtonColor)
         draw.SimpleText(text, 'scp-sweps1', w / 2, h / 2, Color(200, 200, 200, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
@@ -129,10 +129,10 @@ function ZombieMenu()
         CloseButtonColor = Color(60, 60, 60, 255)
     end
 
-    for k, v in ipairs(scp049.ZombieTypes) do
+    for k, v in ipairs(revscp049.ZombieTypes) do
         local ZombieButton = vgui.Create('DButton', SCPZombieMenu)
         ZombieButton:SetSize(buttonW + 1, h / 13)
-        local a = (k - 1) / (#scp049.ZombieTypes - 1)
+        local a = (k - 1) / (#revscp049.ZombieTypes - 1)
         local b = w / 5
         ZombieButton:SetPos(b + ((w - b * 2) * a) - buttonW / 2, h - h / 7.1)
         ZombieButton:SetText('')
