@@ -86,16 +86,8 @@ function ZombieMenu()
 	
 	for k,v in ipairs( scp049.ZombieTeams ) do
 	
-		local model
-		local text
-	
-		if (engine.ActiveGamemode() == 'darkrp' or (GAMEMODE and GAMEMODE.Config and GAMEMODE.Config.DarkRP)) and RPExtraTeams[v].name then
-			model = RPExtraTeams[v].model[1]
-			text = RPExtraTeams[v].name
-		else
-			model = 'models/Zombie/Classic.mdl'
-			text = scp049.lang[6] .. ' ' .. tostring(k)
-		end
+		local model = 'models/Zombie/Classic.mdl'
+		local text = scp049.lang[6] .. ' ' .. tostring(k)
 	
 		local ZombieButton = vgui.Create( 'DButton', SCPZombieMenu )
 		ZombieButton:SetSize( buttonW + 1, h / 13 )
