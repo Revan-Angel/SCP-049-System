@@ -216,15 +216,6 @@ MODULE.menu = {
 }
 
 function MODULE:init()
-	--  warn for old version
-	timer.Simple( 0, function()
-		if GuthSCP and GuthSCP.registerKeycardSWEP then
-			local text = "The old version of this addon is currently running on this server. Please, delete the '[SCP] Keycard System by Guthen' addon to avoid any possible conflicts."
-			self:add_error( text )
-			self:error( text )
-		end
-	end )
-
     MODULE:info("The 049 system has been loaded !")
 end
 
