@@ -228,5 +228,5 @@ function MODULE:init()
     MODULE:info("The 049 system has been loaded !")
 end
 
-guthscp.module.hot_reload("revscp049")
+guthscp.module.hot_reload("scp049")
 return MODULE
