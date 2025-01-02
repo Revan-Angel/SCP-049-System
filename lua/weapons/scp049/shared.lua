@@ -3,7 +3,9 @@ if not scp049 then scp049 = {} end
 local revscp049 = guthscp.modules.revscp049
 local config049 = guthscp.configs.revscp049
 
-AddCSLuaFile("autorun/revscp049/shared.lua")
+if SERVER then
+    AddCSLuaFile("autorun/revscp049/shared.lua")
+end
 include("autorun/revscp049/shared.lua")
 
 if not guthscp then
