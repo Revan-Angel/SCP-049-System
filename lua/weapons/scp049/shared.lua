@@ -8,8 +8,6 @@ if not guthscp then
     return
 end
 
-include('config.lua')
-
 scp049.Language = guthscp.configs.language_doctor 
 
 scp049.lang = scp049.lang or {}
