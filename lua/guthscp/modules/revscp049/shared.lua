@@ -1,4 +1,5 @@
 local revscp049 = guthscp.modules.revscp049
+scp049 = scp049 or {}
 
 surface.CreateFont('scp-sweps1', {
     font = 'Arial',  -- Change 'Arial' if needed
