@@ -1,8 +1,6 @@
 AddCSLuaFile()
 scp049 = scp049 or {}
 
-include("shared.lua")
-
 surface.CreateFont('scp-sweps1', {
     font = 'Arial',
     size = ScrW() * 0.014, 
