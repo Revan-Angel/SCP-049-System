@@ -198,9 +198,9 @@ function SWEP:CallRagdollTarget(owner, target)
 
             local zombieData = scp049.ZombieTypes[ZombieType]
             if not zombieData then
-                print("ZombieType is not defined correctly.")
+                print("[ERROR] ZombieType invalid:", ZombieType)
                 return
-            end
+            end            
 
             target:SetModel(zombieData.model)
             target:SetMaxHealth(zombieData.health)

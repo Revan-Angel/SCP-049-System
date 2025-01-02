@@ -1,14 +1,5 @@
 local revscp049 = guthscp.modules.revscp049
-scp049 = scp049 or {}
 
-surface.CreateFont('scp-sweps1', {
-    font = 'Arial',  -- Change 'Arial' if needed
-    size = ScrW() * 0.014,  -- Taille de la police en fonction de la largeur de l'écran
-    weight = 500,  -- Poids de la police (500 est standard, peut être ajusté)
-    antialias = true,  -- Activer l'anti-aliasing pour un rendu plus lisse
-    shadow = false,  -- Pas d'ombre
-    outline = false,  -- Pas de contour
-})
 
 revscp049.filter = guthscp.players_filter:new("revscp049")
 
@@ -58,26 +49,6 @@ hook.Add("SetupMove", "revscp049:no_move", function(ply, mv, cmd)
         mv:SetButtons(bit.band(mv:GetButtons(), bit.bnot(IN_JUMP)))
     end
 end)
-
-scp049.ZombieTypes = {
-    [1] = {
-        model = "models/player/alski/scp049-2_scientist.mdl",
-        health = 400,
-        speed = 240,
-    },
-    [2] = {
-        model = "models/player/alski/scp049-2mtf2.mdl",
-        health = 1500,
-        speed = 140,
-    },
-    [3] = {
-        model = "models/player/alski/scp049-2.mdl",
-        health = 800,
-        speed = 180,
-    },
-}
-
-scp049.DefaultZombieType = 1
 
 local function ButtonClick(a)
     net.Start('scp049-change-zombie')
