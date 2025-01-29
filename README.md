@@ -17,13 +17,14 @@ This addon is available on the Workshop just [here](https://steamcommunity.com/s
 ## Features
 Contains a SWEP, of class `scp049`, designed for multiplayer:
 + **Left Mouse Button**: You will be able **to transform** your victims in order **to heal** them and turn them **into your zombies.**
-+ **Right Mouse Button**: to Heal your zombies
++ **Right Mouse Button**: to Play a random sound
 + **Reload**: Menu to choose the Type of zombies
-+ **Calms down** with the lavander
++ **Calms down** with the lavander (SOON)
 + Configurable in-game with [[GuthSCP] Base](https://steamcommunity.com/sharedfiles/filedetails/?id=3034737316) (`guthscp_menu` in your console)
     + **Health**: If SCP 049 is Immortal ? And how time it takes to heal his zombies
-    + **Sound**: Custom sounds played random (soon)
-    + **Full translation system (soon)** 
+    + **Sound**: Custom sounds played random
+    + **Full translation system**
+    + **A Progression to you "Operation" as SCP 049 when you "Heal" your victim**
     + ***and more..***
 + **DarkRP Dependant or variant**
 + **Custom compatibility with:**
