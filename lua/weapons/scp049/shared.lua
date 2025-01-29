@@ -3,37 +3,17 @@ if not scp049 then scp049 = {} end
 local revscp049 = guthscp.modules.revscp049
 local config049 = guthscp.configs.revscp049
 
-if SERVER then
-    AddCSLuaFile("autorun/revscp049/shared.lua")
-end
-include("autorun/revscp049/shared.lua")
-
 if not guthscp then
     error("guthscp049 - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!")
     return
 end
 
-scp049.Language = guthscp.configs.language_doctor 
-
-scp049.lang = scp049.lang or {}
-
-if scp049.Language then
-    scp049.lang = {
-        guthscp.configs.translation_1,
-        guthscp.configs.translation_2,
-        guthscp.configs.translation_3,
-        guthscp.configs.translation_4,
-        guthscp.configs.translation_5,
-        guthscp.configs.translation_6
-    }
-end
-
+local dist_sqr = 125 * 125 -- second number is the threshold distance between the player and the scp
 
 -----------------------------
 
 if SERVER then
     util.AddNetworkString('scp049-change-zombie')
-    print('SCP-049 SWEP | ' .. (scp049.lang and scp049.lang[2] or "Langue non définie"))
 end
 
 
@@ -41,7 +21,7 @@ SWEP.Base = "weapon_base"
 
 SWEP.Author = 'RevanAngel'
 SWEP.PrintName = 'SCP-049'
-SWEP.Instructions = scp049.lang[1]
+SWEP.Instructions = config049.translation_1
 SWEP.Category = 'GuthSCP'
 
 SWEP.Slot = 1
@@ -57,10 +37,12 @@ SWEP.Spawnable = true
 SWEP.AdminOnly = false
 
 SWEP.ViewModelFlip = false
-SWEP.SetHoldType = 'pistol'
 
 SWEP.ViewModel = 'models/weapons/c_arms.mdl'
 SWEP.WorldModel = ''
+
+SWEP.UseHands = true
+SWEP.AnimPrefix = "rpg"
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
@@ -95,6 +77,10 @@ hook.Add('PlayerDeath', 'scp049-zombie-death', function(victim, inflictor, attac
 end)
 
 SWEP.LastHealTime = 0
+
+function SWEP:Initialize()
+    self:SetHoldType("normal")
+end
 
 local function HealZombie(self, target)
     if not IsValid(target) or not target:IsPlayer() or not target:GetNWBool("IsZombie", false) then
@@ -131,7 +117,7 @@ function SWEP:Think()
     if CLIENT then
         if self.Owner:KeyPressed(IN_RELOAD) then
             if not IsValid(SCPZombieMenu) then
-                ZombieMenu()
+                revscp049.ZombieMenu()
             end
         end
     end
@@ -163,6 +149,16 @@ function SWEP:Think()
             HealZombie(self, target)
         end
     end
+
+    if not IsFirstTimePredicted() then return end
+    local trace = self:GetOwner():GetEyeTrace()
+    local target = trace.Entity
+    local holdType = "normal"
+    if target:IsPlayer() and not guthscp.is_scp(target) and target:GetPos():DistToSqr(self:GetOwner():GetPos()) <= dist_sqr and not revscp049.is_scp_049_zombie(target) then
+        holdType = "pistol"
+    end
+
+    self:SetHoldType(holdType)
 end
 
 scp049.Zombies = scp049.Zombies or 0
@@ -175,6 +171,8 @@ function SWEP:CallRagdollTarget(owner, target)
     if revscp049.is_scp_049_zombie(target) then
         return
     end
+
+    local zombietypes = revscp049.GetZombieTypes049()
 
     target:SetNoDraw(true)
     target:Lock()
@@ -195,17 +193,18 @@ function SWEP:CallRagdollTarget(owner, target)
 
     target:SetViewEntity(ragdoll)
 
-    timer.Simple(5, function()
+    timer.Simple(2.8, function()
         if IsValid(target) and IsValid(ragdoll) then
+
             target:SetNoDraw(false)
             target:SetPos(ragdoll:GetPos())
             ragdoll:Remove()
 
-            local zombieData = scp049.ZombieTypes[ZombieType]
+            local zombieData = zombietypes[ZombieType]
             if not zombieData then
-                print("[ERROR] ZombieType invalid:", ZombieType)
-                return
-            end            
+                print("ZombieType is not defined correctly taking the first one.")
+                zombieData = zombietypes[1]
+            end
 
             target:SetModel(zombieData.model)
             target:SetMaxHealth(zombieData.health)
@@ -259,6 +258,7 @@ function SWEP:PrimaryAttack()
         
         if IsValid(target) and (target:IsPlayer() or target:IsNPC()) then
             if revscp049.is_scp_049_zombie(target) then
+                guthscp.player_message( self:GetOwner(), config049.translation_3 )
                 return
             end
         
@@ -277,15 +277,71 @@ function SWEP:PrimaryAttack()
         
             scp049.Zombies = scp049.Zombies or 0
             if scp049.Zombies >= guthscp.configs.revscp049.zb_limits and guthscp.configs.revscp049.zb_limits ~= 0 then
+                guthscp.player_message( self:GetOwner(), config049.translation_4 )
                 return
             end
 
-            self:CallRagdollTarget(self:GetOwner(), target)
+            if config049.progressbar then
+                self:SetNWFloat("Progress", 0) -- Initialize progress
+
+                guthscp.player_message( self:GetOwner(), config049.translation_progress_start )
+                self:GetOwner():SetNWBool("scp049_Infected", true)
+
+                timer.Create("ProgressTimer", 0.1, 50, function()
+                    if IsValid(self) and IsValid(target) and target:GetPos():DistToSqr(self:GetOwner():GetPos()) <= dist_sqr then -- Check that the SWEP and target are still valid
+                        local progress = math.min(self:GetNWFloat("Progress", 0) + config049.progressbar_speed, 100)
+                        self:SetNWFloat("Progress", progress)
+                        if progress >= 100 then
+                            timer.Remove("ProgressTimer")
+                            self:GetOwner():SetNWBool("scp049_Infected", false)
+                            self:CallRagdollTarget(self:GetOwner(), target)
+                            guthscp.player_message( self:GetOwner(), config049.translation_progress_finish )
+                        end
+                    else
+                        guthscp.player_message( self:GetOwner(), config049.translation_progress_stop )
+                        timer.Remove("ProgressTimer") -- Remove timer if SWEP or target is no longer valid
+                        self:GetOwner():SetNWBool("scp049_Infected", false)
+                    end
+                end)
+            else
+                self:CallRagdollTarget(self:GetOwner(), target)
+            end
         end
     end
 end
 
+function SWEP:DrawHUD()
+	
+    local ply = self:GetOwner()
+	if not IsValid( ply ) or not ply:Alive() then return end
+
+    if ply:GetNWBool("scp049_Infected") then
+        if IsValid(wep) and revscp049.is_scp_049(ply) then
+            local progress = wep:GetNWFloat("Progress", 0)
+
+            surface.SetDrawColor(50, 50, 50, 220)
+            surface.DrawRect(ScrW() * 0.5 - 100, ScrH() * 0.9, 200, 20)
+
+            surface.SetDrawColor(0, 255, 0, 220)
+            surface.DrawRect(ScrW() * 0.5 - 100, ScrH() * 0.9, progress * 2, 20)
+        end
+    end
+	
+end
+
+SWEP.NextSecondaryAttack = 0
+
 function SWEP:SecondaryAttack()
+	if not SERVER then return end
+
+	local ply = self:GetOwner()
+    -- Play random sound
+    local sounds = config049.random_sound
+    if #sounds == 0 then return end
+
+    ply:EmitSound(sounds[math.random(#sounds)], nil, nil)
+
+	self:SetNextSecondaryFire( CurTime() + 5.0 )
 end
 
 function SWEP:Reload()
@@ -299,7 +355,9 @@ function SWEP:ShouldDropOnDie()
     return false
 end
 
-function SWEP:Holster()
+function SWEP:Deploy()
+    if CLIENT or not IsValid(self:GetOwner()) then return true end
+    self:GetOwner():DrawWorldModel(false)
     return true
 end
 

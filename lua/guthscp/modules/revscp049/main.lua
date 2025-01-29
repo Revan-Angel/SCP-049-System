@@ -31,12 +31,13 @@ local MODULE = {
     icon = "icon16/user.png",
 	version_url = "https://raw.githubusercontent.com/Revan-Angel/scp049-guthen/refs/heads/main/lua/guthscp/modules/revscp049/main.lua?",
     dependencies = {
-		base = "2.2.0",
-		guthscpkeycard = "2.1.4",
+		base = "2.3.1",
+		guthscpkeycard = "2.1.5",
 	},
     requires = {
 		["server.lua"] = guthscp.REALMS.SERVER,
 		["shared.lua"] = guthscp.REALMS.SHARED,
+		["client.lua"] = guthscp.REALMS.CLIENT,
 	},
 }
 
@@ -71,7 +72,7 @@ MODULE.menu = {
 				{
 					type = "Bool",
 					name = "Immortal",
-					id = "immortal",
+					id = "scp049_immortal",
 					desc = "If checked, SCP-049 can't take damage",
 					default = true,
 				},
@@ -106,28 +107,28 @@ MODULE.menu = {
 					default = {},
 				},
 			},
-			"Progress Bar [TEST : Don't touch]",
+			"Progress Bar",
 			{
 				{
 				type = "Bool",
-				name = "Progress Bar [TEST]",
+				name = "Progress Bar",
 				id = "progressbar",
 				desc = "Should progress bar for SCP-049 be enabled?",
 				default = false,
 				},
 				{
 				type = "Number",
-				name = "Progress Bar Speed [TEST]",
+				name = "Progress speed",
 				id = "progressbar_speed",
-				desc = "How fast should the progress bar be filled?",
-				default = 0.5,
+				desc = "How fast should the operation be ?",
+				default = 2,
 				},
 			},
-			"Sounds [TEST : Don't touch]",
+			"Sounds",
 			{
 				{
 					type = "String[]",
-					name = "Random Sounds [TEST]",
+					name = "Random Sounds",
 					id = "random_sound",
 					desc = "Random-sound played by 049",
 					default = {
@@ -140,49 +141,147 @@ MODULE.menu = {
 					},
 				},
 			},
-			"Translations [In development..]",
+			"Translations",
 			{
 				type = "String",
-				name = "Text display", 
+				name = "Instructions", 
 				id = "translation_1", 
-				desc = "Text display with the weapon", 
+				desc = "Text display with the weapon as a Instructions", 
 				default = "LMB - Cure the pestilence; RMB - Restore health to the cured player;  R  - Choose a treatment method",
 			},
 			{
 				type = "String",
-				name = "DarkRP game mode required",
-				id = "translation_2", 
-				desc = "Text shown to the player when the hack is complete",
-				default = "DarkRP game mode required",
-			},
-			{
-				type = "String",
-				name = "This player doesn\'t have a pestilence!",
+				name = "Already cured",
 				id = "translation_3", 
 				desc = "Text display when the player is a zombie", 
 				default = "This player doesn\'t have a pestilence!",
 			},
 			{
 				type = "String",
-				name = "You have exceeded the limit of treatment for pestilence.",
+				name = "Zombie Cap.",
 				id = "translation_4", 
 				desc = "Max zombie limit reach'", 
 				default = "You have exceeded the limit of treatment for pestilence.",
 			},
 			{
 				type = "String",
-				name = "Close",
+				name = "Menu Close Button",
 				id = "translation_5", 
 				desc = "Close button", 
 				default = "Close",
 			},
 			{
 				type = "String",
-				name = "Zombie",
-				id = "translation_6", 
-				desc = "Zombie name", 
-				default = "Zombie",
+				name = "Start Infection",
+				id = "translation_progress_start", 
+				desc = "Text shown to the player when the infection is started",
+				default = "The operation on patient start !",
 			},
+			{
+				type = "String",
+				name = "Infection Complete",
+				id = "translation_progress_finish", 
+				desc = "Text shown to the player when the infection is completed",
+				default = "The operation is a great sucess !",
+			},
+			{
+				type = "String",
+				name = "Stop Infection",
+				id = "translation_progress_stop", 
+				desc = "Text shown to the player when the infection is stopped",
+				default = "The operation has been canceled !",
+			},
+
+			"Zombie type 1 : Juggernaut",
+			{
+				type = "String",
+				name = "Name",
+				id = "jugg_name", 
+				desc = "The name of the type of this zombie",
+				default = "Juggernaut Zombie",
+			},
+			{
+				type = "Number",
+				name = "Health", 
+				id = "jugg_health", 
+				desc = "The health of the zombie", 
+				default = "1500",
+			},
+			{
+				type = "String",
+				name = "Model",
+				id = "jugg_model", 
+				desc = "The Playermodel of the zombie",
+				default = "models/player/zombie_soldier.mdl",
+			},
+			{
+				type = "Number",
+				name = "Speed",
+				id = "jugg_speed", 
+				desc = "The speed of the zombie", 
+				default = "140",
+			},
+
+			"Zombie type 2 : Normal",
+			{
+				type = "String",
+				name = "Name",
+				id = "normal_name", 
+				desc = "The name of the type of this zombie",
+				default = "Normal Zombie",
+			},
+			{
+				type = "Number",
+				name = "Health", 
+				id = "normal_health", 
+				desc = "The health of the zombie", 
+				default = "800",
+			},
+			{
+				type = "String",
+				name = "Model",
+				id = "normal_model", 
+				desc = "The Playermodel of the zombie",
+				default = "models/player/zombie_classic.mdl",
+			},
+			{
+				type = "Number",
+				name = "Speed",
+				id = "normal_speed", 
+				desc = "The speed of the zombie", 
+				default = "180",
+			},
+
+			"Zombie type 3 : Scout",
+			{
+				type = "String",
+				name = "Name",
+				id = "scout_name", 
+				desc = "The name of the type of this zombie",
+				default = "Scout Zombie",
+			},
+			{
+				type = "Number",
+				name = "Health", 
+				id = "scout_health", 
+				desc = "The health of the zombie", 
+				default = "400",
+			},
+			{
+				type = "String",
+				name = "Model",
+				id = "scout_model", 
+				desc = "The Playermodel of the zombie",
+				default = "models/player/zombie_fast.mdl",
+			},
+			{
+				type = "Number",
+				name = "Speed",
+				id = "scout_speed", 
+				desc = "The speed of the zombie", 
+				default = "240",
+			},
+			
 		},
 	},
 	details = {
@@ -219,5 +318,5 @@ function MODULE:init()
     MODULE:info("The 049 system has been loaded !")
 end
 
-guthscp.module.hot_reload("scp049")
+guthscp.module.hot_reload("revscp049")
 return MODULE
