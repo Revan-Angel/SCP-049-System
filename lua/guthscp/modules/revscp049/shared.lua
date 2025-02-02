@@ -10,8 +10,14 @@ if SERVER then
     revscp049.filter:listen_disconnect()
     revscp049.filter:listen_weapon_users("scp049")
 
-    revscp049.filter.event_removed:add_listener("revscp049:reset", function(ply)
-        // revscp049.stop_scp_049_sounds(ply)
+    
+	revscp049.filter.event_added:add_listener( "revscp049:setup", function( ply )
+		--  speeds
+		ply:SetSlowWalkSpeed( config049.walk_speed )
+		ply:SetWalkSpeed( config049.walk_speed )
+		ply:SetRunSpeed( config049.run_speed )
+	end )
+    revscp049.filter.event_removed:add_listener("revscp049:reset", function( ply )
     end)
 
     //

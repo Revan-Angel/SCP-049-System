@@ -63,18 +63,18 @@ MODULE.menu = {
 					end,
 				},
 				{
-					type = "Bool",
-					name = "Disable Jump",
-					id = "disable_jump",
-					desc = "Should SCP-049 be able to jump?",
-					default = true,
+					type = "Number",
+					name = "Walk Speed",
+					id = "walk_speed",
+					desc = "Speed of walking for SCP-049, in hammer units",
+					default = 150,
 				},
 				{
-					type = "Bool",
-					name = "Immortal",
-					id = "scp049_immortal",
-					desc = "If checked, SCP-049 can't take damage",
-					default = true,
+					type = "Number",
+					name = "Run Speed",
+					id = "run_speed",
+					desc = "Speed of running for SCP-049, in hammer units",
+					default = 210,
 				},
 				{
 					type = "Number",
@@ -92,6 +92,21 @@ MODULE.menu = {
 					default = 9,
 					min = 0,
 				},
+
+				{
+					type = "Bool",
+					name = "Disable Jump",
+					id = "disable_jump",
+					desc = "Should SCP-049 be able to jump?",
+					default = true,
+				},
+				{
+					type = "Bool",
+					name = "Immortal",
+					id = "scp049_immortal",
+					desc = "If checked, SCP-049 can't take damage",
+					default = true,
+				},
 				{
 					type = "Bool",
 					name = "Ignores SCPs",
@@ -99,6 +114,7 @@ MODULE.menu = {
 					desc = "If checked, SCP-049 won't be able to transform others SCP's Teams",
 					default = true,
 				},
+
 				{
 					type = "Teams",
 					name = "Ignore Teams",
