@@ -26,7 +26,7 @@
 local MODULE = {
     name = "SCP-049",
     author = "RevanAngel",
-    version = "1.0.0",
+    version = "1.1.0",
     description = "Be the doctor. Heal your patients",
     icon = "icon16/user.png",
 	version_url = "https://raw.githubusercontent.com/Revan-Angel/scp049-guthen/refs/heads/main/lua/guthscp/modules/revscp049/main.lua?",
