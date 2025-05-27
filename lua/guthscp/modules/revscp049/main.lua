@@ -31,8 +31,8 @@ local MODULE = {
     icon = "icon16/user.png",
 	version_url = "https://raw.githubusercontent.com/Revan-Angel/scp049-guthen/refs/heads/main/lua/guthscp/modules/revscp049/main.lua?",
     dependencies = {
-		base = "2.3.1",
-		guthscpkeycard = "2.1.5",
+		base = "2.4.0",
+		guthscpkeycard = "2.1.6",
 	},
     requires = {
 		["server.lua"] = guthscp.REALMS.SERVER,
