@@ -1,12 +1,13 @@
 AddCSLuaFile()
-if not scp049 then scp049 = {} end
-local revscp049 = guthscp.modules.revscp049
-local config049 = guthscp.configs.revscp049
 
 if not guthscp then
     error("guthscp049 - fatal error! https://github.com/Guthen/guthscpbase must be installed on the server!")
     return
 end
+
+if not scp049 then scp049 = {} end
+local revscp049 = guthscp.modules.revscp049
+local config049 = guthscp.configs.revscp049
 
 local dist_sqr = 125 * 125 -- second number is the threshold distance between the player and the scp
 
