@@ -221,7 +221,7 @@ MODULE.menu = {
 				name = "Health", 
 				id = "jugg_health", 
 				desc = "The health of the zombie", 
-				default = "1500",
+				default = 1500,
 			},
 			{
 				type = "String",
@@ -235,7 +235,7 @@ MODULE.menu = {
 				name = "Speed",
 				id = "jugg_speed", 
 				desc = "The speed of the zombie", 
-				default = "140",
+				default = 140,
 			},
 
 			"Zombie type 2 : Normal",
@@ -251,7 +251,7 @@ MODULE.menu = {
 				name = "Health", 
 				id = "normal_health", 
 				desc = "The health of the zombie", 
-				default = "800",
+				default = 800,
 			},
 			{
 				type = "String",
@@ -265,7 +265,7 @@ MODULE.menu = {
 				name = "Speed",
 				id = "normal_speed", 
 				desc = "The speed of the zombie", 
-				default = "180",
+				default = 180,
 			},
 
 			"Zombie type 3 : Scout",
@@ -281,7 +281,7 @@ MODULE.menu = {
 				name = "Health", 
 				id = "scout_health", 
 				desc = "The health of the zombie", 
-				default = "400",
+				default = 400,
 			},
 			{
 				type = "String",
@@ -295,7 +295,7 @@ MODULE.menu = {
 				name = "Speed",
 				id = "scout_speed", 
 				desc = "The speed of the zombie", 
-				default = "240",
+				default = 240,
 			},
 			
 		},
