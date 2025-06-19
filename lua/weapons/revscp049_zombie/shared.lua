@@ -10,7 +10,7 @@ SWEP.Purpose = "Clique droit pour attaquer! R pour crier!"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/weapons/c_arms_citizen.mdl"
+SWEP.ViewModel = "models/weapons/c_arms.mdl"
 SWEP.UseHands = true
 SWEP.WorldModel = ""
 
