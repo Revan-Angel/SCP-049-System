@@ -10,7 +10,7 @@ SWEP.Purpose = "Clique droit pour attaquer! R pour crier!"
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
 
-SWEP.ViewModel = "models/player/alski/scp049-2classdarms.mdl"
+SWEP.ViewModel = "models/weapons/c_zombieswep.mdl"
 SWEP.UseHands = true
 SWEP.WorldModel = ""
 
